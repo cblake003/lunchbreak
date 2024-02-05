@@ -20,6 +20,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('csrf/', csrf_token, name='csrf_token'),
     path('change-name/', change_user_name, name='change_name'),
+    path('orders/<int:employee_id>/', OrderDetailView.as_view(), name='order-detail'),
 ]
 
 
