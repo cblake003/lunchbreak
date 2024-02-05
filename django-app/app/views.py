@@ -211,3 +211,19 @@ def change_user_name(request):
         serializer.save()
         return Response({'message': 'First name updated successfully.'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderDetailView(generics.RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializier_class = OrderSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned orders to a given employee,
+        by filtering against a `employee_id` query parameter in the URL.
+        """
+        queryset = super().get_queryset()
+        employee_id = self.kwargs.get('employee_id')
+        if employee_id is not None:
+            queryset = queryset.filter(employee__id=employee_id)
+        return queryset
