@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import FoodSerializer, GroupSerializer, UserSerializer, UserRegistrationSerializer, UserFirstNameSerializer
-from .models import Food
+from .models import Food, Order, OrderItem
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import logout, get_user_model
 from rest_framework.permissions import IsAuthenticated
@@ -19,6 +19,7 @@ from django.utils.decorators import method_decorator
 import logging
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+
 
 logger = logging.getLogger(__name__)
 
