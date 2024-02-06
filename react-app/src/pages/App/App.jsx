@@ -17,6 +17,7 @@ import ChangeNamePage from "../ChangeNamePage/ChangeNamePage";
 
 function App() {
   // const [user, setUser] = useState();
+  
   return (
     <UserProvider>
       <main className="App">
