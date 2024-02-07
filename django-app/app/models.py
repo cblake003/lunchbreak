@@ -9,6 +9,7 @@ class Food(models.Model):
 
     def _str_(self):
         return self.title
+
     
 class Company(models.Model):
     company_name = models.CharField(max_length=255)
@@ -120,3 +121,12 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"
+    
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
+
+    def __str__(self):
+        return self.user.username
