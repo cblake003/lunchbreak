@@ -32,13 +32,16 @@ class FoodView(viewsets.ModelViewSet):
     # permission_classes = [check_group('Restaurant_Admin')]
     permission_classes = [CheckGroup.for_group('Restaurant_Admin')]
 
+
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class UserCreateView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -74,7 +77,6 @@ class UserCreateView(generics.CreateAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -85,38 +87,6 @@ def get_user_info(request):
     return Response(serializer.data)
 
 
-# class CustomTokenObtainPairView(TokenObtainPairView):
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#         except Exception as e:
-#             return Response({"detail": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         data = serializer.validated_data
-#         response = Response({"message": "Login successful"}, status=status.HTTP_200_OK)
-#         response.set_cookie(
-#             'access_token',
-#             data['access'],
-#             httponly=True,
-#             max_age=3600,  # or your desired duration
-#             samesite='Lax',
-#             secure=True,  # Use secure=True in production
-#             path='/',
-#         )
-#         response.set_cookie(
-#             'refresh_token',
-#             data['refresh'],
-#             httponly=True,
-#             max_age=86400,  # or your desired duration
-#             samesite='Lax',
-#             secure=True,
-#             path='/',
-#         )
-#         return response
-
-
 # @method_decorator(csrf_protect, name='dispatch')
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -125,47 +95,25 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             access_token = response.data['access']
             refresh_token = response.data['refresh']
             response.set_cookie(
-                'access_token', access_token, httponly=True, max_age=3600, samesite='Lax'
+                'access_token', 
+                access_token, 
+                httponly=True, 
+                max_age=3600, 
+                samesite='Lax'
             )
             response.set_cookie(
-                'refresh_token', refresh_token, httponly=True, samesite='Lax'
+                'refresh_token', 
+                refresh_token, 
+                httponly=True, 
+                samesite='Lax'
             )
-            # del response.data['refresh']  # Optional: Remove refresh token from response
+            # del response.data['refresh']  # If we want to remove refresh token from response
         return response
 
-    
-# class CustomTokenRefreshView(TokenRefreshView):
-#     def post(self, request, *args, **kwargs):
-#         # Extract refresh token from cookies instead of request data
-#         refresh_token = request.COOKIES.get('refresh_token')
-#         if not refresh_token:
-#             return Response({"detail": "Refresh token not provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-#         serializer = self.get_serializer(data={'refresh': refresh_token})
-
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#         except Exception as e:
-#             return Response({"detail": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         data = serializer.validated_data
-#         response = Response({"message": "Token refreshed successfully"}, status=status.HTTP_200_OK)
-#         response.set_cookie(
-#             'access_token',
-#             data['access'],
-#             httponly=True,
-#             max_age=3600,
-#             samesite='Lax',
-#             secure=True,  # Consider toggling based on settings.DEBUG for testing
-#             path='/',
-#         )
-#         return response
 
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
-        # Set the refresh token from cookies to the request data
         request.data['refresh'] = request.COOKIES.get('refresh_token')
-        
         try:
             # Attempt to refresh the token using the parent class's logic
             response = super().post(request, *args, **kwargs)
