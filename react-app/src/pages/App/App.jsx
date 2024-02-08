@@ -14,6 +14,7 @@ import RestaurantIndexPage from "../RestaurantIndexPage/RestaurantIndexPage";
 import { UserProvider } from "../../hooks/userContext";
 import FoodsTestPage from "../FoodsTestPage/FoodsTestPage";
 import ChangeNamePage from "../ChangeNamePage/ChangeNamePage";
+import RestaurantMenuPage from "../RestaurantMenuPage/RestaurantMenuPage";
 
 function App() {
   // const [user, setUser] = useState();
@@ -30,6 +31,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="/restaurants" element={<RestaurantIndexPage />} />
+          <Route path="/restaurants/:restaurantId" element={<RestaurantMenuPage />} />
           <Route path="/change-name" element={<ChangeNamePage />} />
           <Route
             path="/error"

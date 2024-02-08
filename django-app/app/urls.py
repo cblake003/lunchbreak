@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
 from .views import FoodView, GroupViewSet, UserCreateView, logout_view, csrf_token, change_user_name
-from .views import CustomTokenObtainPairView, CustomTokenRefreshView
+from .views import CustomTokenObtainPairView, CustomTokenRefreshView, EmployeeDailyOrdersView
 
 router = DefaultRouter()
 router.register(r'foods', FoodView)
@@ -20,7 +20,8 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('csrf/', csrf_token, name='csrf_token'),
     path('change-name/', change_user_name, name='change_name'),
-    path('orders/<int:employee_id>/', OrderDetailView.as_view(), name='order-detail'),
+    # path('orders/<int:employee_id>/', OrderDetailView.as_view(), name='order-detail'),
+    path('employee/<int:employee_id>/daily-orders/', EmployeeDailyOrdersView.as_view(), name='employee-daily-orders'),
 ]
 
 

@@ -91,11 +91,18 @@ api.interceptors.response.use(
     }
 );
 
-
-export const getOrderDetails = async (employeeId) => {
-    const response = await api.get(`/orders/${employeeId}`);
-    return response.data; // Assuming your API returns the details directly
+const getRestaurantDetails = async (restaurantId) => {
+    return await api.get(`/restaurants/${restaurantId}`);
 };
+
+const getMenuItemsForRestaurant = async (restaurantId) => {
+    return await api.get(`/restaurants/${restaurantId}/menu_items`);
+};
+
+// export const getOrderDetails = async (employeeId) => {
+//     const response = await api.get(`/orders/${employeeId}`);
+//     return response.data; // Assuming your API returns the details directly
+// };
 
 export default api;
 
