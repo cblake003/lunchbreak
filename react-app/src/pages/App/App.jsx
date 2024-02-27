@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Homepage from "../Homepage/Homepage";
 import GroupsTest from "../GroupsTest/GroupsTest";
@@ -14,7 +14,7 @@ import RestaurantIndexPage from "../RestaurantIndexPage/RestaurantIndexPage";
 import { UserProvider } from "../../hooks/userContext";
 import FoodsTestPage from "../FoodsTestPage/FoodsTestPage";
 import ChangeNamePage from "../ChangeNamePage/ChangeNamePage";
-import RestaurantMenuPage from "../RestaurantMenuPage/RestaurantMenuPage";
+import RestaurantDetailsPage from "../RestaurantDetailsPage/RestaurantDetailsPage"
 
 function App() {
   // const [user, setUser] = useState();
@@ -31,8 +31,8 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="/restaurants" element={<RestaurantIndexPage />} />
-          <Route path="/restaurants/:restaurantId" element={<RestaurantMenuPage />} />
           <Route path="/change-name" element={<ChangeNamePage />} />
+          <Route path="/restaurants/:restaurantId" element={<RestaurantDetailsPage />} />
           <Route
             path="/error"
             element={
