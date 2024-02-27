@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Food
+from .models import Food, Order, OrderItem
 from django.contrib.auth.models import User, Group
 
 
@@ -48,3 +48,15 @@ class UserFirstNameSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.save()
         return instance
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['menu_item', 'quantity', 'selected_options']
+
+class OrderSerializer(serializers.ModelSerializer):
+    menu_items = OrderItemSerializer(source='orderitem_set', many=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'company', 'restaurant', 'menu_items', 'order_date', 'total_price', 'status', 'special_instructions']
