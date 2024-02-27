@@ -8,6 +8,7 @@ const RestaurantDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+//   useApi hook here instead of this to make the call. Don't need all this logic because useAPI 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {

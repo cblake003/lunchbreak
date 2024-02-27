@@ -161,29 +161,3 @@ def change_user_name(request):
         serializer.save()
         return Response({'message': 'First name updated successfully.'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class EmployeeDailyOrdersView(ListAPIView):
-    serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        """
-        This view returns a list of all the orders placed by a given employee on a specific day.
-        """
-        employee_id = self.kwargs.get('employee_id')
-        order_date = self.request.query_params.get('date')
-
-        # Parse the date string to a date object (consider error handling for invalid formats)
-        try:
-            order_date = timezone.datetime.strptime(order_date, '%Y-%m-%d').date()
-        except (ValueError, TypeError):
-            # Handle error or default to today's date
-            order_date = timezone.now().date()
-
-        # Filter orders by employee and date
-        start_day = timezone.datetime.combine(order_date, timezone.datetime.min.time())
-        end_day = timezone.datetime.combine(order_date, timezone.datetime.max.time())
-        queryset = Order.objects.filter(user_id=employee_id, order_date__range=(start_day, end_day))
-
-        return queryset
