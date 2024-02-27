@@ -1,6 +1,7 @@
 import React from "react";
 import RestaruantIndexCard from "../../components/RestaurantIndexCard/RestaurantIndexCard";
 import DateSelector from "../../components/DateSelector/DateSelector";
+import { Link } from 'react-router-dom'
 
 export default function RestaurantIndexPage() {
   return (
