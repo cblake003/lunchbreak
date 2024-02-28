@@ -8,6 +8,7 @@ const useApi = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+    // modulates the data through this hook on the backend and uses those variables for what's being determined. It's almost like middleware that's processing API responses for you and then uses the variables that are defined in the useAPI hook
     const handleErrorResponse = (error) => {
         if (error.response) {
             const status = error.response.status;
