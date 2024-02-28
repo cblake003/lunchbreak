@@ -29,10 +29,10 @@ function App() {
           <Route path="/groups" element={<GroupsTest />} />
           <Route path="/foods" element={<FoodsTestPage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="/restaurants" element={<RestaurantIndexPage />} />
           <Route path="/change-name" element={<ChangeNamePage />} />
-          <Route path="/restaurants/:restaurantId" element={<RestaurantDetailsPage />} />
+          <Route path="/restaurants/details" element={<RestaurantDetailsPage />} />
+          <Route path="/not-found" element={<NotFoundPage />} />
           <Route
             path="/error"
             element={

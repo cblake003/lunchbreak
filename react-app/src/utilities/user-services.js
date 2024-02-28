@@ -78,7 +78,7 @@ api.interceptors.response.use(
         // Handle refresh token expiration specifically
         // e.g., redirect to login or show a modal
         console.error(error.response.data.detail);
-        window.location.href = "/login"; // Redirect to login
+        window.location.href = "/auth"; // Redirect to login
         return Promise.reject(error);
       } else {
         originalRequest._retry = true;
@@ -90,7 +90,7 @@ api.interceptors.response.use(
         } catch (refreshError) {
           // If the refresh attempt fails, handle accordingly
           console.error("Unable to refresh token", refreshError);
-          window.location.href = "/login"; // Redirect to login as a fallback
+          window.location.href = "/auth"; // Redirect to login as a fallback
           return Promise.reject(refreshError);
         }
       }

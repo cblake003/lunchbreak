@@ -6,17 +6,16 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../utilities/user-services";
 
 const linkGroups = {
-  admin: [
-    { href: "/dashboard", title: "Dashboard" },
-    { href: "/manage-users", title: "Manage Users" },
+  Company_Employee: [
+    { href: "/restaurants", title: "Restaurants" },
+    { href: "/restaurants/details", title: "Restaurants Details Page" },
     // ... other admin links
   ],
-  user: [
+  Company_Admin: [
     { href: "/profile", title: "Profile" },
     { href: "/settings", title: "Settings" },
     // ... other user links
   ],
-  // ... other groups
   Restaurant_Admin: [
     { href: "/groups", title: "Groups" },
     { href: "/foods", title: "Foods" },
