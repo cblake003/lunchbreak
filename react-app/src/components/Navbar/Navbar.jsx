@@ -58,7 +58,7 @@ export default function Navbar() {
         <div
           className={`absolute md:relative top-full right-0 md:flex flex-col md:flex-row w-full md:w-auto bg-gray-800 md:bg-transparent ${
             isMenuOpen ? "flex" : "hidden"
-          }`}
+          } text-center`}
         >
           {commonLinks.concat(userLinks).map((link) => (
             <a
