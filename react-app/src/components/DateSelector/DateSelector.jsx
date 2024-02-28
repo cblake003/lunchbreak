@@ -20,6 +20,7 @@ export default function DateSelector({ onDateSelected }) {
     setDate(startValue);
     const dayOfWeek = getDay(startValue);
     onDateSelected(dayOfWeek);
+    console.log(dayOfWeek);
   };
 
   return (
@@ -34,3 +35,7 @@ export default function DateSelector({ onDateSelected }) {
     </div>
   );
 }
+
+// Passsing a date object for info
+// Debugging dates
+// DatepickerEvent: {startValue, endValue, rangeDates} find out why not keeping track values
