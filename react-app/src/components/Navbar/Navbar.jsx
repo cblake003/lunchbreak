@@ -44,7 +44,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-gray-800 p-4 relative">
+    <nav className="sticky top-0 bg-gray-800 p-4 relative">
       <div className="container mx-auto flex items-center justify-between ">
         <a href="/" className="text-xl font-bold text-white">
           LunchBreak
