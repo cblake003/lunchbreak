@@ -6,17 +6,16 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../utilities/user-services";
 
 const linkGroups = {
-  admin: [
-    { href: "/dashboard", title: "Dashboard" },
-    { href: "/manage-users", title: "Manage Users" },
+  Company_Employee: [
+    { href: "/restaurants", title: "Restaurants" },
+    { href: "/restaurants/details", title: "Restaurants Details Page" },
     // ... other admin links
   ],
-  user: [
+  Company_Admin: [
     { href: "/profile", title: "Profile" },
     { href: "/settings", title: "Settings" },
     // ... other user links
   ],
-  // ... other groups
   Restaurant_Admin: [
     { href: "/groups", title: "Groups" },
     { href: "/foods", title: "Foods" },
@@ -45,7 +44,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-gray-800 p-4 relative">
+    <nav className="sticky top-0 bg-gray-800 p-4 relative">
       <div className="container mx-auto flex items-center justify-between ">
         <a href="/" className="text-xl font-bold text-white">
           LunchBreak
@@ -59,7 +58,7 @@ export default function Navbar() {
         <div
           className={`absolute md:relative top-full right-0 md:flex flex-col md:flex-row w-full md:w-auto bg-gray-800 md:bg-transparent ${
             isMenuOpen ? "flex" : "hidden"
-          }`}
+          } text-center`}
         >
           {commonLinks.concat(userLinks).map((link) => (
             <a

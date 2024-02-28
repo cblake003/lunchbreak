@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import api from "../../utilities/user-services";
-import { useApi } from "../../hooks/useApi";
+import useApi from "../../hooks/useApi"; 
 
 export default function RestaurantIndexComponent({ selectedDay }) {
   const [restaurants, setRestaurants] = useState([]);
