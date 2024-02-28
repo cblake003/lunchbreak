@@ -1,22 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import useApi from '../../hooks/useApi';
+import api from '../../utilities/user-services';
+import Category from '../../components/Category/Category';
+import MenuItem from '../../components/MenuItem/MenuItem';
 
 export default function RestaurantDetailsPage() {
+    const { id: restaurantId } = useParams();
+    const { data: restaurant, error, loading, request } = useApi();
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  return (
-    // need to render every category that the restaurant has set up
-    // need to grab from the model what pieces that restaurant specifically has
-    // Remember options for the menu items - conditionally render the options and the values for those options
-    // 
-    <div>
-      <h1>Restaurant Name</h1>
-      <h2>Menu Items</h2>
-      <ul>
-        Menu Item 1
-            <li>Category</li>
-            <li>Options</li>
-      </ul>
-    </div>
-  );
-};
+    useEffect(() => {
+        request(api.get, `/restaurants/${restaurantId}/`);
+    }, [restaurantId, request]);
+
+    const handleCategorySelection = (categoryId) => {
+        setSelectedCategoryId(categoryId);
+    };
+
+    // if (loading) return <p>Loading restaurant details...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+
+    return (
+        <div>
+            <h2>{restaurant?.name}</h2>
+            <p>Address: {restaurant?.address}</p>
+            <p>Phone: {restaurant?.contact_phone}</p>
+            <h3>Select a category:</h3>
+            <Category restaurantId={restaurantId} onSelect={handleCategorySelection} />
+            {selectedCategoryId && (
+                <div>
+                    <h3>Menu Items</h3>
+                    <MenuItem categoryId={selectedCategoryId} />
+                </div>
+            )}
+        </div>
+    );
+}
