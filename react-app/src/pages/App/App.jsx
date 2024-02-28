@@ -21,28 +21,30 @@ function App() {
   
   return (
     <UserProvider>
-      <main className="App">
+      <div className="flex flex-col min-h-screen">
         <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/groups" element={<GroupsTest />} />
-          <Route path="/foods" element={<FoodsTestPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/not-found" element={<NotFoundPage />} />
-          <Route path="/restaurants" element={<RestaurantIndexPage />} />
-          <Route path="/change-name" element={<ChangeNamePage />} />
-          <Route path="/restaurants/:restaurantId" element={<RestaurantDetailsPage />} />
-          <Route
-            path="/error"
-            element={
-              <GenericErrorPage message="An unexpected error occurred." />
-            }
-          />
-          <Route path="/*" element={<NotFoundPage />} />
-        </Routes>
+        <main className="App flex-grow">
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/groups" element={<GroupsTest />} />
+            <Route path="/foods" element={<FoodsTestPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/restaurants" element={<RestaurantIndexPage />} />
+            <Route path="/change-name" element={<ChangeNamePage />} />
+            <Route path="/restaurants/details" element={<RestaurantDetailsPage />} />
+            <Route path="/not-found" element={<NotFoundPage />} />
+            <Route
+              path="/error"
+              element={
+                <GenericErrorPage message="An unexpected error occurred." />
+              }
+            />
+            <Route path="/*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
         <Footer />
-      </main>
+      </div>
     </UserProvider>
   );
 }
