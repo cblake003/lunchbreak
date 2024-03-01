@@ -21,7 +21,9 @@ urlpatterns = [
     path('csrf/', csrf_token, name='csrf_token'),
     path('change-name/', change_user_name, name='change_name'),
     # path('orders/<int:employee_id>/', OrderDetailView.as_view(), name='order-detail'),
-    path('employee/<int:employee_id>/daily-orders/', EmployeeDailyOrdersView.as_view(), name='employee-daily-orders'),
+    path('employee/<int:employee_id>/daily-orders/',
+         EmployeeDailyOrdersView.as_view(), name='employee-daily-orders'),
+    # Build out url for restaurants
 ]
 
 
