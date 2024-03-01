@@ -1,45 +1,43 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import api from "../../utilities/user-services";
-import useApi from "../../hooks/useApi"; 
+import { Link } from "react-router-dom";
+import useApi from "../../hooks/useApi";
 
 export default function RestaurantIndexComponent({ selectedDay }) {
   const [restaurants, setRestaurants] = useState([]);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   // Assume passing the restaruaunt id as a state
-  // const {
-  //   data: restaurant,
-  //   restaurantError,
-  //   restaurantLoading,
-  //   request,
-  // } = useApi();
+  const { data: apiRestaurants, error, request } = useApi();
 
   // Fetches restaurants by day
+  // Strigify the selectedDay to be used in the API call in DateSelector
+  const selectedDayString = encodeURIComponent(selectedDay);
+  // After pass as the uri component encodeURIComponent(selectedDay)
 
-  // useEffect(() => {
-  //   // const fetchRestaurantsByDay = async (day) => {
-  //   //   setIsLoading(true);
-  //   //   try {
-  //   //     const response = await api.get(`/restaurants/${day}`);
-  //   //     setRestaurants(response.data);
-  //   //     setError(null);
-  //   //   } catch (error) {
-  //   //     console.log("Error fetching restaurants by day:", error);
-  //   //     setError(error.message);
-  //   //   } finally {
-  //   //     setIsLoading(false); // Set loading state to false when the request is completed
-  //   //   }
-  //   // };
-
-  //   if (selectedDay) {
-  //     fetchRestaurantsByDay(selectedDay);
-  //   } else {
-  //     // If no day is selected, set restaurants to an empty array
-  //     setRestaurants([]);
-  //     setError(null);
-  //   }
-  // }, [selectedDay, api]);
+  useEffect(() => {
+    const fetchRestaurantByDay = async () => {
+      if (!selectedDay) {
+        setRestaurants([]);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        // Directly call the API using the endpoint and selectedDay
+        // Adjust the endpoint as necessary. This assumes your API expects something like '/restaurants/day/1
+        console.log(restaurants);
+        await request(api.get, `/restaurants/${selectedDayString}`);
+        setRestaurants(apiRestaurants);
+      } catch (error) {
+        console.error("Error fetching restaurants:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRestaurantByDay();
+    console.log(`restaurant: ${restaurants}`);
+    console.log(`restaurant: ${apiRestaurants}`);
+  }, [selectedDay]);
 
   if (!selectedDay) {
     return <div>Please select a day to see available restaurants</div>;
@@ -51,15 +49,25 @@ export default function RestaurantIndexComponent({ selectedDay }) {
     return (
       <div>
         <h2>Restaurants</h2>
-        <ul>
-          {restaurants.map((restaurant) => (
-            <li key={restaurant.id}>
-              <img src={restaurant.image} className="w-24" alt="" />
-              <h3>{restaurant.name}</h3>
-              <p>{restaurant.description}</p>
-            </li>
-          ))}
-        </ul>
+        {restaurants?.length > 0 ? (
+          <ul>
+            {restaurants?.map((restaurant) => (
+              <li key={restaurant.id}>
+                <Link to={`/restaurants/${restaurant.id}`}>
+                  {restaurant.name}
+                </Link>
+                <img
+                  src={restaurant.image}
+                  alt={restaurant.name}
+                  className="w-24"
+                />
+                <p>{restaurant.description}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No restaurants available for the selected day</p>
+        )}
       </div>
     );
   }
