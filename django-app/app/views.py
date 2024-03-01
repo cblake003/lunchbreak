@@ -195,7 +195,7 @@ class EmployeeDailyOrdersView(ListAPIView):
 
         return queryset
 
-
+# This is an example for the restuarant custom views
 # @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 # def logout_view(request):
@@ -205,5 +205,4 @@ class EmployeeDailyOrdersView(ListAPIView):
 #     response.delete_cookie('refresh_token', path='/')
 #     response.delete_cookie('csrftoken', path='/')
 #     return response   gonna be similar to this for creating restaurant
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
