@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { signup } from '../../utilities/user-services'; // Ensure these functions handle API calls appropriately
 import { UserContext } from '../../hooks/userContext';
 import api from '../../utilities/user-services'; // Assuming this exports configured Axios instance
+import { fetchUser } from '../../utilities/user-services'; 
 
 export default function SignupForm() {
     const [formData, setFormData] = useState({
@@ -41,6 +42,7 @@ export default function SignupForm() {
         try {
             console.log({ username, email, password }); // Confirm payload structure
             const signupResponse = await signup({ username, email, password });
+            console.log(`signUpResponse in submit ${JSON.stringify(signupResponse)}`)
             // Assuming login updates localStorage for tokens
             // const userInfo = await login(username, password); 
             if (signupResponse) {
@@ -54,9 +56,10 @@ export default function SignupForm() {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await api.get('/userinfo/');
-            if (response && response.data) {
-                setUser(response.data); // Update UserContext with fetched user info
+            const response = await fetchUser()
+            if (response) {
+                localStorage.setItem('userInfo', JSON.stringify(response))
+                setUser(response); // Update UserContext with fetched user info
                 navigate('/'); // Navigate to the homepage or dashboard after login
             }
         } catch (error) {

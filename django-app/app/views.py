@@ -204,4 +204,6 @@ class EmployeeDailyOrdersView(ListAPIView):
 #     response.delete_cookie('access_token', path='/')
 #     response.delete_cookie('refresh_token', path='/')
 #     response.delete_cookie('csrftoken', path='/')
-#     return response   gonna be similar to this for creating restaurants
+#     return response   gonna be similar to this for creating restaurant
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

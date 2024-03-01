@@ -1,43 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import useApi from '../../hooks/useApi';
+import api from '../../utilities/user-services';
+import Category from '../../components/Category/Category';
+import MenuItem from '../../components/MenuItem/MenuItem';
 
-const RestaurantDetailsPage = () => {
-  const { restaurantId } = useParams();
-  const [restaurantDetails, setRestaurantDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+export default function RestaurantDetailsPage() {
+    const { id: restaurantId } = useParams();
+    const { data: restaurant, error, loading, request } = useApi();
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  useEffect(() => {
-    const fetchRestaurantDetails = async () => {
-      try {
-        // Adjust the URL and API call as per your backend configuration
-        const response = await axios.get(`/api/restaurants/${restaurantId}`);
-        setRestaurantDetails(response.data);
-      } catch (err) {
-        setError('Failed to fetch restaurant details.');
-      } finally {
-        setLoading(false);
-      }
+    useEffect(() => {
+        request(api.get, `/restaurants/${restaurantId}/`);
+    }, [restaurantId, request]);
+
+    const handleCategorySelection = (categoryId) => {
+        setSelectedCategoryId(categoryId);
     };
 
-    fetchRestaurantDetails();
-  }, [restaurantId]);
+    // if (loading) return <p>Loading restaurant details...</p>;
+    if (error) return <p>Error: {error.message}</p>;
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  return (
-    <div>
-      <h1>{restaurantDetails?.name}</h1>
-      {/* Render other restaurant details */}
-      <ul>
-        {restaurantDetails?.menuItems.map(item => (
-          <li key={item.id}>{item.name} - ${item.price}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default RestaurantDetailsPage;
+    return (
+        <div>
+            <h2>{restaurant?.name}</h2>
+            <p>Address: {restaurant?.address}</p>
+            <p>Phone: {restaurant?.contact_phone}</p>
+            <h3>Select a category:</h3>
+            <Category restaurantId={restaurantId} onSelect={handleCategorySelection} />
+            {selectedCategoryId && (
+                <div>
+                    <h3>Menu Items</h3>
+                    <MenuItem categoryId={selectedCategoryId} />
+                </div>
+            )}
+        </div>
+    );
+}
