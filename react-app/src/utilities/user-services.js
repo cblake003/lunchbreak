@@ -38,7 +38,7 @@ export const fetchUser = async () => {
 export const signup = async ({ username, email, password }) => {
   // Include CSRF token in the header for signup request
   const csrfToken = getCsrfToken();
-  await api.post(
+  const response = await api.post(
     "/signup/",
     { username, email, password },
     {
@@ -47,6 +47,8 @@ export const signup = async ({ username, email, password }) => {
       },
     }
   );
+  console.log(`userServices response: ${JSON.stringify(response.data)}`)
+  return response.data
   // Assuming the backend responds with user info or a success message
 };
 
