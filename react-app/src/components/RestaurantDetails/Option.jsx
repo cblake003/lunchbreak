@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import useApi from '../../hooks/useApi';
 import api from '../../utilities/user-services';
-import OptionValue from '../OptionValue/OptionValue';
+import OptionValue from './OptionValue';
 
 export default function Option({ menuItemId }) {
   const { data: options, error, loading, request } = useApi();

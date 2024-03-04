@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import useApi from '../../hooks/useApi'; 
 import api from '../../utilities/user-services';
-import MenuItem from '../MenuItem/MenuItem';
+import MenuItem from './MenuItem';
 
 export default function Category({ restaurantId }) {
   const { data: categories, error, loading, request } = useApi();

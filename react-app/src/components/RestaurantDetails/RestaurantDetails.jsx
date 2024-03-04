@@ -21,6 +21,13 @@ export default function RestaurantDetails() {
       <h2>{restaurant?.name}</h2>
       <p>Address: {restaurant?.address}</p>
       <p>Phone: {restaurant?.contact_phone}</p>
+      {/* render all the categories here */}
+      {/* conditionally render the items for the categories
+      Get all Restaurant Details from API call on this page - don't need to call on each component */}
+      {/* have it return an array of objects so the object is structured to have all the details */}
+      {/* save as a piece of state and update that state */}
+      {/* create a view function to make that initial call and get all details */}
+      {/* nested structure - array of objects */}
       <Category restaurantId={restaurantId} />
     </div>
   );
