@@ -19,6 +19,7 @@ export default function RestaurantDetailsPage() {
 
     function handleMenuItemClick(itemId) {
       console.log("menu item clicked")
+      // TAKE TO OPTION COMPONENT
     }
 
     return (
@@ -34,6 +35,8 @@ export default function RestaurantDetailsPage() {
                     <h4>{menuItem.name} - ${menuItem.price}</h4>
                     <p>{menuItem.description}</p>
                     <div id={`options-${menuItem.id}`} style={{ display: `none` }}>
+                      {/* think about what tailwind classes to use so it doesn't break the code */}
+                      {/* might need to refactor some of this into a form */}
                     </div>
                   </li>
                 )}
