@@ -7,7 +7,7 @@ import MenuItem from '../../components/RestaurantDetails/MenuItem';
 
 export default function RestaurantDetailsPage() {
     const { id: restaurantId } = useParams();
-    const { data: restaurantDetails, error, loading, request } = useAPI();
+    const { data: restaurantDetails, error, loading, request } = useApi();
 
     useEffect(() => {
       const endpoint = `/api/restaurants/${restaurantId}/details`;
@@ -16,6 +16,10 @@ export default function RestaurantDetailsPage() {
 
     // if (loading) return <p>Loading restaurant details...</p>;
     if (error) return <p>Error: {error.message}</p>;
+
+    function handleMenuItemClick(itemId) {
+      console.log("menu item clicked")
+    }
 
     return (
         <div>
