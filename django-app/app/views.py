@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
+
 class FoodView(viewsets.ModelViewSet):
     serializer_class = FoodSerializer
     queryset = Food.objects.all()
@@ -54,7 +55,8 @@ class UserCreateView(generics.CreateAPIView):
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
-            response = Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+            response = Response(
+                {"message": "User created successfully"}, status=status.HTTP_201_CREATED)
             response.set_cookie(
                 'access_token',
                 str(refresh.access_token),
@@ -76,7 +78,7 @@ class UserCreateView(generics.CreateAPIView):
             return response
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -95,16 +97,16 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             access_token = response.data['access']
             refresh_token = response.data['refresh']
             response.set_cookie(
-                'access_token', 
-                access_token, 
-                httponly=True, 
-                max_age=3600, 
+                'access_token',
+                access_token,
+                httponly=True,
+                max_age=3600,
                 samesite='Lax'
             )
             response.set_cookie(
-                'refresh_token', 
-                refresh_token, 
-                httponly=True, 
+                'refresh_token',
+                refresh_token,
+                httponly=True,
                 samesite='Lax'
             )
             # del response.data['refresh']  # If we want to remove refresh token from response
@@ -117,7 +119,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         try:
             # Attempt to refresh the token using the parent class's logic
             response = super().post(request, *args, **kwargs)
-            
+
             if response.status_code == 200:
                 # If token refresh is successful, update the access token cookie
                 access_token = response.data['access']
@@ -125,7 +127,7 @@ class CustomTokenRefreshView(TokenRefreshView):
                     'access_token', access_token, httponly=True, samesite='Lax'
                 )
             return response
-        
+
         except Exception as e:
             # Handle specific exceptions here as needed
             # For a generic catch-all, return a custom error response
@@ -133,7 +135,6 @@ class CustomTokenRefreshView(TokenRefreshView):
                 "error": "refresh_token_expired",
                 "detail": "The refresh token is expired or invalid. Please login again."
             }, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 @api_view(['POST'])
@@ -146,10 +147,12 @@ def logout_view(request):
     response.delete_cookie('csrftoken', path='/')
     return response
 
+
 def csrf_token(request):
     # Ensure a CSRF token is set in the cookies
     csrf_token = get_token(request)
     return JsonResponse({'detail': 'CSRF token set in cookies'})
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -161,3 +164,45 @@ def change_user_name(request):
         serializer.save()
         return Response({'message': 'First name updated successfully.'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmployeeDailyOrdersView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view returns a list of all the orders placed by a given employee on a specific day.
+        """
+        employee_id = self.kwargs.get('employee_id')
+        order_date = self.request.query_params.get('date')
+
+        # Parse the date string to a date object (consider error handling for invalid formats)
+        try:
+            order_date = timezone.datetime.strptime(
+                order_date, '%Y-%m-%d').date()
+        except (ValueError, TypeError):
+            # Handle error or default to today's date
+            order_date = timezone.now().date()
+
+        # Filter orders by employee and date
+        start_day = timezone.datetime.combine(
+            order_date, timezone.datetime.min.time())
+        end_day = timezone.datetime.combine(
+            order_date, timezone.datetime.max.time())
+        queryset = Order.objects.filter(
+            user_id=employee_id, order_date__range=(start_day, end_day))
+
+        return queryset
+
+# This is an example for the restuarant custom views
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def logout_view(request):
+#     logout(request)
+#     response = JsonResponse({'message': 'Logout successful'})
+#     response.delete_cookie('access_token', path='/')
+#     response.delete_cookie('refresh_token', path='/')
+#     response.delete_cookie('csrftoken', path='/')
+#     return response   gonna be similar to this for creating restaurant
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
