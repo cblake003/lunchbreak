@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Food, Order, OrderItem
+from .models import Food, Order, OrderItem, Restaurant
 from django.contrib.auth.models import User, Group
 
 
@@ -14,16 +14,19 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name']
 
+
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'groups']
+        fields = ['id', 'username', 'email',
+                  'first_name', 'last_name', 'groups']
 
     def get_groups(self, obj):
         return [group.name for group in obj.groups.all()]
-    
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -37,26 +40,37 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        return user    
-    
+        return user
+
+
 class UserFirstNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name']  # Targeting the 'first_name' field
 
     def update(self, instance, validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.first_name = validated_data.get(
+            'first_name', instance.first_name)
         instance.save()
         return instance
+
+
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = '__all__'
+
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ['menu_item', 'quantity', 'selected_options']
 
+
 class OrderSerializer(serializers.ModelSerializer):
     menu_items = OrderItemSerializer(source='orderitem_set', many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'company', 'restaurant', 'menu_items', 'order_date', 'total_price', 'status', 'special_instructions']
+        fields = ['id', 'user', 'company', 'restaurant', 'menu_items',
+                  'order_date', 'total_price', 'status', 'special_instructions']
