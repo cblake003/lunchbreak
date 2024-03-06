@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import FoodSerializer, GroupSerializer, UserSerializer, UserRegistrationSerializer, UserFirstNameSerializer, OrderSerializer
-from .models import Food, Order, OrderItem
+from .serializers import RestaurantSerializer, FoodSerializer, GroupSerializer, UserSerializer, UserRegistrationSerializer, UserFirstNameSerializer, OrderSerializer
+from .models import Food, Order, OrderItem, Restaurant
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import logout, get_user_model
 from rest_framework.permissions import IsAuthenticated
@@ -196,13 +196,21 @@ class EmployeeDailyOrdersView(ListAPIView):
         return queryset
 
 # This is an example for the restuarant custom views
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def logout_view(request):
-#     logout(request)
-#     response = JsonResponse({'message': 'Logout successful'})
-#     response.delete_cookie('access_token', path='/')
-#     response.delete_cookie('refresh_token', path='/')
-#     response.delete_cookie('csrftoken', path='/')
-#     return response   gonna be similar to this for creating restaurant
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_restaurants_for_day(request):
+    # Extract the date from the request
+    day = request.query_params.get('day', None)
+
+    if day is not None:
+        # Filters restaurants by specific day
+        restaurants = Restaurant.object.filter(active_days__contains=day)
+        if restaurants.exist():
+            serializer = RestaurantSerializer(restaurants, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'No restaurants found for this day'}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response({'error': 'Day parameter is required'}, status=status.HTTP_400_BAD_REQUEST)

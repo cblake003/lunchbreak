@@ -26,6 +26,7 @@ export default function DateSelector({ onDateSelected }) {
         locale={enUS}
         startValue={date} // Sets Start date to today & sets to selected date
         endValue={date} // Sets End date to today & sets to selected date
+        color="blue"
       />
       <div>Select a date</div>
     </div>
