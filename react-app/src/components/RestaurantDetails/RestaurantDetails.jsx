@@ -5,7 +5,7 @@ import api from '../../utilities/user-services';
 import Category from './Category';
 
 export default function RestaurantDetails() {
-    const { id } = useParams(); // This extracts the "id" param from the URL
+  const { id } = useParams(); // This extracts the "id" param from the URL
   const { data: restaurant, error, loading, request } = useApi();
 
   useEffect(() => {
