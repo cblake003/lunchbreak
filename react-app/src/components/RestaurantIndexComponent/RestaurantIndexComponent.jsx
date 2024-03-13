@@ -5,46 +5,34 @@ import { Link } from "react-router-dom";
 import useApi from "../../hooks/useApi";
 
 export default function RestaurantIndexComponent({ selectedDay }) {
-  const [restaurants, setRestaurants] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [restaurants, setRestaurants] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
   // Assume passing the restaruaunt id as a state
-  const { data: apiRestaurants, error, request } = useApi();
+  const { data: restaurants, loading, error, request } = useApi();
 
   // Fetches restaurants by day
   // Strigify the selectedDay to be used in the API call in DateSelector
-  const selectedDayString = encodeURIComponent(selectedDay);
+  // const selectedDayString = encodeURIComponent(selectedDay);
   // After pass as the uri component encodeURIComponent(selectedDay)
 
   useEffect(() => {
     const fetchRestaurantByDay = async () => {
-      if (!selectedDay) {
-        setRestaurants([]);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        // Directly call the API using the endpoint and selectedDay
-        // Adjust the endpoint as necessary. This assumes your API expects something like '/restaurants/day/1
-        console.log(restaurants);
-        await request(api.get, `/restaurants/${selectedDayString}`);
-        setRestaurants(apiRestaurants);
-      } catch (error) {
-        console.error("Error fetching restaurants:", error);
-      } finally {
-        setIsLoading(false);
+      if (selectedDay) {
+        // setRestaurants([]);
+        // return;
+        request(api.get, `/restaurants/day/${encodeURIComponent(selectedDay)}`);
       }
     };
     fetchRestaurantByDay();
     console.log(`restaurant: ${restaurants}`);
-    console.log(`restaurant: ${apiRestaurants}`);
-  }, [selectedDay]);
+  }, [selectedDay, request]);
 
   if (!selectedDay) {
     return <div>Please select a day to see available restaurants</div>;
-  } else if (isLoading) {
+  } else if (loading) {
     return <div>Loading...</div>;
   } else if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message}</div>;
   } else {
     return (
       <div>

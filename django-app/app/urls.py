@@ -1,12 +1,13 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import FoodView, GroupViewSet, UserCreateView, logout_view, csrf_token, change_user_name
+from .views import FoodView, GroupViewSet, UserCreateView, logout_view, csrf_token, change_user_name, get_restaurants_for_day
 from .views import CustomTokenObtainPairView, CustomTokenRefreshView
 
 router = DefaultRouter()
 router.register(r'foods', FoodView)
 router.register(r'groups', GroupViewSet)
+
 # router.register(r'users', UserViewSet)
 
 urlpatterns = [
@@ -23,8 +24,10 @@ urlpatterns = [
     # path('orders/<int:employee_id>/', OrderDetailView.as_view(), name='order-detail'),
     # path('employee/<int:employee_id>/daily-orders/',
     #      EmployeeDailyOrdersView.as_view(), name='employee-daily-orders'),
-    # Build out url for restaurants
-    # path('employee/<int:employee_id>/daily-orders/', EmployeeDailyOrdersView.as_view(), name='employee-daily-orders'),
+    # Build out url for restaurants,
+    path('restaurants/day/',
+         get_restaurants_for_day, name='get_restaurants_for_day'),
+
 
 ]
 
