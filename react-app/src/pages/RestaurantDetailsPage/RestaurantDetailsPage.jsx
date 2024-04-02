@@ -4,22 +4,23 @@ import useApi from '../../hooks/useApi';
 import api from '../../utilities/user-services';
 import Category from '../../components/RestaurantDetails/Category';
 import MenuItem from '../../components/RestaurantDetails/MenuItem';
-import Option from '../../components/RestaurantDetails/Option';
 
 export default function RestaurantDetailsPage() {
     // const { id: restaurantId } = useParams();
     // const { data: restaurantDetails, error, loading, request } = useApi();
 
     // useEffect(() => {
-    //   const endpoint = `/api/restaurants/${restaurantId}/details`;
-    //   request(api.get, endpoint);
-    // }, [restaurantId, request]);
+    //   // const endpoint = `/api/restaurants/${restaurantId}/details`;
+    //   // request(api.get, endpoint);
+    //   // }, [restaurantId, request]);
+
+    //   request(api.get, '/api/restaurants/details');
+    // }, [request]);
 
     // if (loading) return <p>Loading restaurant details...</p>;
     // if (error) return <p>Error: {error.message}</p>;
 
 // backend will likely return array of objects with option value and then price
-    const [visibleOptionsId, setVisibleOptionsId] = useState(null);
 
     const restaurantOne = {
       name: "The Great Eatery",
@@ -36,10 +37,15 @@ export default function RestaurantDetailsPage() {
             options: [
               {
                 id: 1001,
-                name: "Add strawberries",
+                name: "PROTEIN",
                 price: 1.99,
-                is_multiple: true,
-                is_required: false
+                is_multiple: false,
+                is_required: true,
+                values: [
+                  { id: 101, name: "Chicken" },
+                  { id: 102, name: "Beef" },
+                  { id: 103, name: "Tofu" }
+                ]
               }
             ]
             },
@@ -48,6 +54,19 @@ export default function RestaurantDetailsPage() {
               name: "Eggs Benedict",
               description: "regular ole Eggs Benny",
               price: 7.99,
+              options: [
+                {
+                id: 1002,
+                name: "Toppings",
+                is_required: false,
+                is_multiple: true,
+                values: [
+                  { id: 201, name: "Lettuce" },
+                  { id: 202, name: "Tomato" },
+                  { id: 203, name: "Onion" },
+                ]
+                }
+              ]
             },
           ],
         },
@@ -71,36 +90,31 @@ export default function RestaurantDetailsPage() {
       ],
     }
       const restaurantDetails = restaurantOne;
+
       if (!restaurantDetails) return <p>Loading...</p>
 
     function handleMenuItemClick(itemId) {
-      setVisibleOptionsId(prevVisibleOptionsId => prevVisibleOptionsId === itemId ? null : itemId);
+
+      // setVisibleOptionsId(prevItemId => prevItemId === itemId ? null : itemId);
+      // put this in menu item component and let that be responsibile for visibility state of menu items
+      // approach from perspective of displaying items instead of looking at it for rendering on page
       // TAKE TO OPTION COMPONENT
     }
 
     return (
       <div>
-          <h2>{restaurantOne.name}</h2>
+          <h2>{restaurantDetails?.name}</h2>
           {restaurantDetails?.categories.map(category => (
-              <div key={category.id}>
-                  <h3>{category.name}</h3>
-                  <ul>
-                      {category.menuItems.map(menuItem => (
-                          <li key={menuItem.id} onClick={() => handleMenuItemClick(menuItem.id)} style={{ cursor: 'pointer' }}>
-                              <h4>{menuItem.name} - ${menuItem.price}</h4>
-                              <p>{menuItem.description}</p>
-                              {visibleOptionsId === menuItem.id && (
-                                  <Option options={menuItem.options} />
-                              )}
-                          </li>
-                      ))}
-                  </ul>
+              <div> 
+                <Category key={category.id} category={category} />
               </div>
           ))}
       </div>
   );
 }
 
+
+// USE SEPARATE COMPONENT FOR MENU ITEM FOR A LITTLE CLEANER CODE - maintain piece of state for each menu item that keeps track of the visibility of it
 
 // you can select multiple option values for toppings, but you'd only want to select one option for protein. Keep this in mind when rendering. Option model is being adjusted to have 2 new properties - if it's required or not, if it's single or multiple selection
 // will need to do conditional rendering on what type of dropdown it is based on that
