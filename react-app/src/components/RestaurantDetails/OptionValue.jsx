@@ -9,6 +9,11 @@ export default function OptionValue({ option }) {
   // right now, the parent component isn't keeping track of which option value is being selected for the specific menu item - need to pass that information up
   // going to need to keep track of what is required to select - render a UI for perhaps a red asterisk or (required) in small text; if that's selected, then the UI would show that it was selected
 
+
+  // keep track of a boolean piece of state for if it's required or not (true or false) then Ben can use that for his form cart save
+// set up an empty array that will be filled with the state of menu items that users choose for the form
+
+
   const handleChange = (event, valueName, isChecked) => {
     event.stopPropagation();
 

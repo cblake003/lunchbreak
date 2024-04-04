@@ -22,6 +22,10 @@ export default function RestaurantDetailsPage() {
 
 // backend will likely return array of objects with option value and then price
 
+// introduce some type of margin on navbar or div
+// use navtags
+// make a mini nav bar with the categories so we can jump to it?
+
     const restaurantOne = {
       name: "The Great Eatery",
       categories: [
